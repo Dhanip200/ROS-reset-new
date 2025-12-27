@@ -118,3 +118,6 @@ Write a publisher node (talker)
 Write a subscriber node (listener)
 
 Run them and see communication
+🔹 Step 1: Go to your package
+cd ~/ros2_ws/src/my_first_package/my_first_package
+ls
