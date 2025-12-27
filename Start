@@ -105,3 +105,16 @@ Build it:
 cd ~/ros2_ws
 colcon build
 source install/setup.bash
+
+Lesson 4: Writing Your First ROS 2 Python Node 🐍🤖
+(You’re officially doing real ROS now.)
+
+🧠 Goal of this lesson
+
+You will:
+
+Write a publisher node (talker)
+
+Write a subscriber node (listener)
+
+Run them and see communication
