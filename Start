@@ -23,3 +23,30 @@ sudo apt update
 sudo apt install curl -y
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
   -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+🔹 STEP 4: Install ROS 2 Humble (Recommended)
+sudo apt update
+sudo apt install ros-humble-desktop -y
+
+
+⏳ This may take a few minutes.
+
+🔹 STEP 5: Source ROS automatically
+
+Add this line to your .bashrc:
+
+echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
+🔹 STEP 6: Install build tools
+sudo apt install python3-colcon-common-extensions -y
+
+🔹 STEP 7: Test ROS 2 installation 🎉
+
+Open two terminals.
+
+Terminal 1:
+ros2 run demo_nodes_cpp talker
+
+Terminal 2:
+ros2 run demo_nodes_py listener
