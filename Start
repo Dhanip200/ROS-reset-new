@@ -83,3 +83,14 @@ ros2 topic echo /chatter
 You’ll see messages like:
 
 data: "Hello World: 42"
+
+🔹 LESSON 2: Create Your Own Workspace 🛠
+Step 1: Create workspace
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+
+Step 2: Build empty workspace
+colcon build
+
+Step 3: Source workspace
+source install/setup.bash
