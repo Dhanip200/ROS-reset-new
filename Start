@@ -50,3 +50,36 @@ ros2 run demo_nodes_cpp talker
 
 Terminal 2:
 ros2 run demo_nodes_py listener
+
+What is a Node?
+
+A node is a program that does one job.
+
+Example:
+
+talker → sends messages
+
+listener → receives messages
+
+What is a Topic?
+
+A topic is a communication channel between nodes.
+
+🔹 Explore running nodes
+
+Open a new terminal:
+
+ros2 node list
+
+You should see:
+
+/talker
+/listener
+
+🔹 Listen to a topic
+ros2 topic echo /chatter
+
+
+You’ll see messages like:
+
+data: "Hello World: 42"
