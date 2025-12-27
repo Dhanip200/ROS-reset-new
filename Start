@@ -94,3 +94,14 @@ colcon build
 
 Step 3: Source workspace
 source install/setup.bash
+
+🔹 LESSON 3: Create Your First Package (Python)
+cd ~/ros2_ws/src
+ros2 pkg create my_first_package --build-type ament_python --dependencies rclpy std_msgs
+
+
+Build it:
+
+cd ~/ros2_ws
+colcon build
+source install/setup.bash
