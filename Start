@@ -121,3 +121,16 @@ Run them and see communication
 🔹 Step 1: Go to your package
 cd ~/ros2_ws/src/my_first_package/my_first_package
 ls
+
+
+🔹 Step 6: Build and source
+cd ~/ros2_ws
+colcon build
+source install/setup.bash
+
+🔹 Step 7: Run your nodes 🎉
+Terminal 1:
+ros2 run my_first_package talker
+
+Terminal 2:
+ros2 run my_first_package listener
