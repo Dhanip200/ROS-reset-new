@@ -1,0 +1,85 @@
+🔹 Step 1: Go to your package
+cd ~/ros2_ws/src/my_first_package/my_first_package
+ls
+
+
+You should see:
+
+__init__.py
+
+🔹 Step 2: Create a publisher node
+
+Create a file:
+
+talker.py
+
+this is the code for 
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+class Talker(Node):
+    def __init__(self):
+        super().__init__('my_talker')
+        self.p=self.create_publisher(String,'talking',10)
+        self.t=self.create_timer(1.0,self.timer_callback)
+        self.count=0
+    def timer_callback(self):
+        msg=String()
+        msg.data=f"HELLO number is {self.count}"
+        self.p.publish(msg)
+        self.get_logger().info(msg.data)
+        self.count+=1
+
+def main():
+    rclpy.init()
+    node=Talker()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+if __name__=='__main__':
+    main()
+
+
+then make listener.py
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+
+class Listener(Node):
+    def __init__(self):
+        super().__init__('makima_listener')
+
+        self.sub = self.create_subscription(
+            String,           # message type
+            'talking',        # topic name
+            self.callback,    # callback function
+            10                # QoS depth
+        )
+
+    def callback(self, msg):
+        self.get_logger().info(f"Makima heard: {msg.data}")
+
+
+def main():
+    rclpy.init()
+    node = Listener()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()
+
+🔹 Step 4: Make files executable
+chmod +x talker.py listener.py
+
+🔹 Step 5: Register nodes in setup.py
+entry_points={
+    'console_scripts': [
+        'talker = my_first_package.talker:main',
+        'listener = my_first_package.listener:main',
+    ],
+},
