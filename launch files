@@ -1,1 +1,32 @@
+this file will launch the files we just made
+
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+    return LaunchDescription([
+
+        Node(
+            package='my_first_package',
+            executable='param_talker',
+            name='param_talker',
+            parameters=[{
+                'publish_rate': 0.5
+            }]
+        ),
+
+        Node(
+            package='my_first_package',
+            executable='listener',
+            name='listener'
+        ),
+
+        Node(
+            package='my_first_package',
+            executable='talker',
+            name='talker'
+        )
+
+    ])
 
