@@ -30,3 +30,8 @@ def generate_launch_description():
 
     ])
 
+in setup.py
+Add this inside data_files:
+
+('share/my_first_package/launch', ['launch/my_system.launch.py']),
+
