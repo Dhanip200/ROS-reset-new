@@ -1,0 +1,157 @@
+action_server.py
+
+Action server code
+
+import rclpy
+from rclpy.node import Node
+from rclpy.action import ActionServer
+from example_interfaces.action import Fibonacci
+import time
+
+
+class FibonacciActionServer(Node):
+    def __init__(self):
+        super().__init__('fibonacci_action_server')
+
+        self.server = ActionServer(
+            self,
+            Fibonacci,
+            'fibonacci',
+            self.execute_callback
+        )
+
+        self.get_logger().info('Action server ready')
+
+    def execute_callback(self, goal_handle):
+        self.get_logger().info('Goal received')
+
+        feedback = Fibonacci.Feedback()
+        result = Fibonacci.Result()
+
+        sequence = [0, 1]
+
+        for i in range(1, goal_handle.request.order):
+            if goal_handle.is_cancel_requested:
+                goal_handle.canceled()
+                result.sequence = sequence
+                return result
+
+            sequence.append(sequence[i] + sequence[i - 1])
+            feedback.sequence = sequence
+            goal_handle.publish_feedback(feedback)
+            time.sleep(1)
+
+        goal_handle.succeed()
+        result.sequence = sequence
+        return result
+
+
+def main():
+    rclpy.init()
+    node = FibonacciActionServer()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
+
+Step 2: Action Client
+
+Create:
+
+nano ~/ros2_ws/src/my_first_package/my_first_package/action_client.py
+
+Action client code
+
+import rclpy
+from rclpy.node import Node
+from rclpy.action import ActionClient
+from example_interfaces.action import Fibonacci
+
+
+class FibonacciActionClient(Node):
+    def __init__(self):
+        super().__init__('fibonacci_action_client')
+
+        self.client = ActionClient(
+            self,
+            Fibonacci,
+            'fibonacci'
+        )
+
+        self.client.wait_for_server()
+        self.send_goal()
+
+    def send_goal(self):
+        goal = Fibonacci.Goal()
+        goal.order = 5
+
+        self.client.send_goal_async(
+            goal,
+            feedback_callback=self.feedback_callback
+        ).add_done_callback(self.goal_response)
+
+    def goal_response(self, future):
+        goal_handle = future.result()
+        if not goal_handle.accepted:
+            self.get_logger().info('Goal rejected')
+            return
+
+        self.get_logger().info('Goal accepted')
+        goal_handle.get_result_async().add_done_callback(self.get_result)
+
+    def feedback_callback(self, feedback):
+        self.get_logger().info(f'Feedback: {feedback.feedback.sequence}')
+
+    def get_result(self, future):
+        result = future.result().result
+        self.get_logger().info(f'Result: {result.sequence}')
+        rclpy.shutdown()
+
+
+def main():
+    rclpy.init()
+    node = FibonacciActionClient()
+    rclpy.spin(node)
+
+
+if __name__ == '__main__':
+    main()
+
+Step 3: Register in setup.py
+
+Add:
+
+'action_server = my_first_package.action_server:main',
+'action_client = my_first_package.action_client:main',
+
+Step 4: Build
+
+cd ~/ros2_ws
+rm -rf build install log
+colcon build
+source install/setup.bash
+
+ Step 5: Run (two terminals)
+Terminal 1
+
+ros2 run my_first_package action_server
+
+Terminal 2
+
+ros2 run my_first_package action_client
+
+You’ll see:
+
+    feedback every second
+
+    final result at the end
+
+Action mental model
+
+Client → Goal
+Server → Feedback (loop)
+Server → Result
+Client → Can cancel anytime
