@@ -1,0 +1,78 @@
+🚀 Step 1 — Install Gazebo + ROS Bridge (Humble)
+
+Run:
+
+sudo apt update
+sudo apt install ros-humble-gazebo-ros-pkgs
+
+
+This installs:
+
+Gazebo Fortress
+
+ROS ↔ Gazebo bridge
+
+Launch integration
+
+🚀 Step 2 — Test Gazebo
+
+Run:
+
+ros2 launch gazebo_ros gazebo.launch.py
+
+
+If working:
+
+Gazebo window opens
+
+Empty world loads
+
+No errors in terminal
+
+Tell me if it opens successfully.
+
+🚀 Step 3 — Install TurtleBot3 (Recommended Learning Robot)
+sudo apt install ros-humble-turtlebot3*
+
+
+Set model:
+
+echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
+source ~/.bashrc
+
+🚀 Step 4 — Launch TurtleBot3 Simulation
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+
+You should see:
+
+A small robot in a world
+
+Lidar spinning
+
+Physics active
+
+🚀 Step 5 — Check Topics
+
+Open new terminal:
+
+source /opt/ros/humble/setup.bash
+ros2 topic list
+
+
+You should see:
+
+/scan
+/cmd_vel
+/odom
+/tf
+
+🚀 Step 6 — Move the Robot
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2}, angular: {z: 0.0}}"
+
+
+Robot should move forward.
+
+Stop:
+
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0}, angular: {z: 0.0}}"
