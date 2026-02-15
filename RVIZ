@@ -1,0 +1,117 @@
+LiDAR (/scan)
+     ↓
+Localization (AMCL)
+     ↓
+Costmap
+     ↓
+Planner
+     ↓
+Controller
+     ↓
+/cmd_vel → Robot moves
+
+All of this is handled by:
+
+    📦 Navigation2 (Nav2)
+
+🧩 STEP 1 — Install Nav2 (if not installed)
+
+sudo apt install ros-humble-nav2-bringup
+
+🧩 STEP 2 — Launch TurtleBot3 Simulation
+
+Terminal 1:
+
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+Wait until robot fully loads.
+🧩 STEP 3 — Launch Navigation Stack
+
+Terminal 2:
+
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True
+
+What this launches:
+
+    AMCL (localization)
+
+    Planner
+
+    Controller
+
+    Behavior Tree Navigator
+
+    Costmaps
+
+🧩 STEP 4 — Open RViz
+
+If RViz doesn’t open automatically:
+
+ros2 run rviz2 rviz2
+
+Make sure:
+
+    Fixed Frame = map
+
+    You see:
+
+        Map
+
+        Laser scan
+
+        Robot model
+
+        Costmap
+
+🧩 STEP 5 — Set Initial Pose (VERY IMPORTANT)
+
+In RViz:
+
+    Click “2D Pose Estimate”
+
+    Click on robot location
+
+    Drag to set orientation
+
+This initializes localization.
+🧩 STEP 6 — Send Goal
+
+In RViz:
+
+    Click “Nav2 Goal”
+
+    Click somewhere in the map
+
+🎉 Robot should:
+
+    Plan path
+
+    Avoid obstacles using LiDAR
+
+    Move to goal
+
+🧠 What’s Actually Using LiDAR?
+
+LiDAR (/scan) is used by:
+
+    AMCL → localization
+
+    Local costmap → obstacle avoidance
+
+    Controller → safe velocity commands
+
+🔥 If Robot Doesn’t Move
+
+Check:
+
+ros2 topic echo /scan
+
+If data is coming → LiDAR is working.
+
+Check Nav2 lifecycle:
+
+ros2 lifecycle nodes
+
+All should be ACTIVE.
