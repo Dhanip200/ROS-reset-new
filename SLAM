@@ -1,0 +1,35 @@
+🧩 Step 1 — Install SLAM Toolbox
+sudo apt install ros-humble-slam-toolbox
+
+🧩 Step 2 — Launch TurtleBot3 Gazebo
+
+Terminal 1:
+
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+🧩 Step 3 — Launch SLAM
+
+Terminal 2:
+
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True
+
+
+OR (better with Humble):
+
+ros2 launch slam_toolbox online_async_launch.py use_sim_time:=True
+
+🧩 Step 4 — Open RViz
+ros2 run rviz2 rviz2
+
+
+Set:
+
+Fixed Frame → map
+
+Add → Map
+
+Add → LaserScan
+
+You should see map forming while robot moves.
